@@ -1,0 +1,7 @@
+type,gl_vars
+int,var1
+double,var2
+void,var3
+ST_TEMP,var4
+EN_TEMP,var5
+ST_TEMP,var4[]
