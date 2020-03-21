@@ -1,0 +1,7 @@
+type,args
+int,arg1
+double,arg2
+void,arg3
+ST_TEMP,arg4
+EN_TEMP,arg5
+double,arg2[]
