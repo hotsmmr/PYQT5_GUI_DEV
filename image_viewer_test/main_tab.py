@@ -4,7 +4,6 @@ import cv2
 import math
 import os
 import pytesseract
-from PyQt5 import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -57,24 +56,24 @@ class MainTab(QWidget):
         self.timer.timeout.connect(self.time_passes)
         
         # create widgets
-        self.createInputFileLabel("input_file_name(*.png, *.mp4, *.mkv):")
-        self.createInputLineEdit()
-        self.createOutputFileLabel("output_file_name(*.png):")
-        self.createOutputLineEdit()
-        self.createCanvasLabel()
-        self.createComboBox()
-        self.createSlider()
-        self.createTable()
-        self.createStartButton()
-        self.createStopButton()
-        self.createLoadButton()
-        self.createSaveButton()
-        self.createQuitButton()
+        self.create_input_file_label("input_file_name(*.png, *.mp4, *.mkv):")
+        self.create_input_line_edit()
+        self.create_output_file_label("output_file_name(*.png):")
+        self.create_output_line_edit()
+        self.create_canvas()
+        self.create_combo_box()
+        self.create_slider()
+        self.create_table()
+        self.create_start_button()
+        self.create_stop_button()
+        self.create_load_button()
+        self.create_save_button()
+        self.create_quit_button()
 
         # create layout
-        self.updateLayout()
+        self.update_layout()
 
-    def updateLayout(self):
+    def update_layout(self):
         # remove all widgets
         for i in reversed(range(self.layout.count())): 
             self.layout.itemAt(i).widget().setParent(None)
@@ -100,24 +99,24 @@ class MainTab(QWidget):
         self.layout.addWidget(self.wdgt_quit_button) 
         self.setLayout(self.layout)
 
-    def createInputFileLabel(self, text):
+    def create_input_file_label(self, text):
         self.wdgt_input_label = QLabel(text)
 
-    def createOutputFileLabel(self, text):
+    def create_output_file_label(self, text):
         self.wdgt_output_label = QLabel(text)
 
     def createSlidePosLabel(self, text):
         self.wdgt_slide_pos_label = QLabel(text)
         
-    def createInputLineEdit(self):
+    def create_input_line_edit(self):
         self.wdgt_input_edit = QLineEdit()
         self.wdgt_input_edit.textChanged.connect(self.set_input_file_name)
         
-    def createOutputLineEdit(self):
+    def create_output_line_edit(self):
         self.wdgt_output_edit = QLineEdit()
         self.wdgt_output_edit.textChanged.connect(self.set_output_file_name)
 
-    def createCanvasLabel(self):
+    def create_canvas(self):
         self.load_type = 0
         self.img = np.zeros((self.canvas_height, self.canvas_width, 3), dtype=np.uint8)
         self.img.fill(255)
@@ -162,7 +161,7 @@ class MainTab(QWidget):
         self.wdgt_viewer_label.setPixmap(QPixmap.fromImage(qimg))
         self.wdgt_viewer_label.scaleFactor = 1.0
 
-    def updateCanvasLabel(self):
+    def update_canvas_label(self):
         self.load_type = 0
         self.img = np.zeros((self.canvas_height, self.canvas_width, 3), dtype=np.uint8)
         self.img.fill(255)
@@ -198,19 +197,19 @@ class MainTab(QWidget):
         self.wdgt_viewer_label.setPixmap(QPixmap.fromImage(qimg))
         self.wdgt_viewer_label.scaleFactor = 1.0
 
-    def createComboBox(self):
+    def create_combo_box(self):
         self.wdgt_combobox = QComboBox()
         self.wdgt_combobox.addItem("RGB")
         self.wdgt_combobox.addItem("MONO")
-        self.wdgt_combobox.activated.connect(self.change_mode)
+        self.wdgt_combobox.currentTextChanged.connect(self.change_mode)
 
-    def createSlider(self):
+    def create_slider(self):
         self.wdgt_slider = QSlider(Qt.Horizontal)
         self.wdgt_slider.setFocusPolicy(Qt.NoFocus)
         self.wdgt_slider.valueChanged.connect(self.slide_pos)
         self.wdgt_slider.sliderReleased.connect(self.release_slide)
 
-    def createTable(self, src=[]):
+    def create_table(self, src=[]):
         self.wdgt_table = QTableWidget()
         self.wdgt_table.setColumnCount(1)
         self.wdgt_table.setHorizontalHeaderLabels(["pytesseract"])
@@ -221,34 +220,28 @@ class MainTab(QWidget):
         self.wdgt_table.resizeRowsToContents()
         self.wdgt_table.resizeColumnsToContents()
 
-    def createStartButton(self, text="Start"):
-        # Create botton
+    def create_start_button(self, text="Start"):
         self.wdgt_start_button = QPushButton(text)
         self.wdgt_start_button.clicked.connect(self.cap_start)
 
-    def createStopButton(self, text="Stop"):
-        # Create botton
+    def create_stop_button(self, text="Stop"):
         self.wdgt_stop_button = QPushButton(text)
         self.wdgt_stop_button.clicked.connect(self.cap_stop)
 
-    def createLoadButton(self, text="Load"):
-        # Create botton
+    def create_load_button(self, text="Load"):
         self.wdgt_load_button = QPushButton(text)
         self.wdgt_load_button.clicked.connect(self.load_img)
 
-    def createSaveButton(self, text="Save"):
-        # Create botton
+    def create_save_button(self, text="Save"):
         self.wdgt_save_button = QPushButton(text)
         self.wdgt_save_button.clicked.connect(self.save_img)
 
-    def createQuitButton(self, text="Quit"):
-        # Create botton
+    def create_quit_button(self, text="Quit"):
         self.wdgt_quit_button = QPushButton(text)
         self.wdgt_quit_button.clicked.connect(QCoreApplication.instance().quit)
 
     @pyqtSlot()
     def slide_pos(self):
-        # get signalaa
         self.curr_pos = self.wdgt_slider.value()
     
     @pyqtSlot()
@@ -257,9 +250,9 @@ class MainTab(QWidget):
             self.curr_pos += math.ceil(self.fps / 1000 * self.time_interval)
             if self.curr_pos > self.max_pos:
                 self.curr_pos = self.min_pos
-            self.updateCanvasLabel()
-            self.createTable(self.ocr_data)
-            self.updateLayout()
+            self.update_canvas_label()
+            self.create_table(self.ocr_data)
+            self.update_layout()
     
     @pyqtSlot()
     def change_mode(self):
@@ -267,21 +260,17 @@ class MainTab(QWidget):
 
     @pyqtSlot()
     def release_slide(self):
-        self.updateCanvasLabel()
-        self.createTable(self.ocr_data)
-        self.updateLayout()
+        self.update_canvas_label()
+        self.create_table(self.ocr_data)
+        self.update_layout()
 
     @pyqtSlot()
     def set_input_file_name(self):
-        # get signalaa
-        sender = self.sender()
-        self.input_file_name = sender.displayText()
+        self.input_file_name = self.wdgt_input_edit.displayText()
     
     @pyqtSlot()
     def set_output_file_name(self):
-        # get signalaa
-        sender = self.sender()
-        self.output_file_name = sender.displayText()
+        self.output_file_name = self.wdgt_output_edit.displayText()
     
     @pyqtSlot()
     def cap_start(self):
@@ -295,9 +284,9 @@ class MainTab(QWidget):
 
     @pyqtSlot()
     def load_img(self):
-        self.createCanvasLabel()
-        self.createTable(self.ocr_data)
-        self.updateLayout()
+        self.create_canvas()
+        self.create_table(self.ocr_data)
+        self.update_layout()
 
     @pyqtSlot()
     def save_img(self):
